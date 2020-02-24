@@ -10,7 +10,8 @@ const Animal = {
   name: "",
   desc: "-unknown animal-",
   type: "",
-  age: 0
+  age: 0,
+  star: "☆"
 };
 
 function start() {
@@ -38,6 +39,12 @@ function start() {
   // Sort buttons
   document
     .querySelector("[data-action='sort'][data-sort='name']")
+    .addEventListener("click", selected => {
+      sortAnimals(selected.originalTarget.dataset);
+    });
+
+  document
+    .querySelector("[data-action='sort'][data-sort='star']")
     .addEventListener("click", selected => {
       sortAnimals(selected.originalTarget.dataset);
     });
@@ -72,7 +79,7 @@ async function loadJSON() {
 }
 
 function prepareObjects(jsonData) {
-  allAnimals = jsonData.map(preapareObject);
+  allAnimals = jsonData.map(prepareObject);
   filteredAnimals = allAnimals;
 
   // TODO: This might not be the function we want to call first
@@ -104,6 +111,7 @@ function sortAnimals(dataset) {
 
   if (dataset.sortDirection === "asc") {
     filteredAnimals.sort(compareFunction);
+    allAnimals.sort(compareFunction);
     function compareFunction(a, b) {
       if (a[sortThis] < b[sortThis]) {
         return -1;
@@ -114,6 +122,7 @@ function sortAnimals(dataset) {
     dataset.sortDirection = "des";
   } else if (dataset.sortDirection === "des") {
     filteredAnimals.sort(compareFunction);
+    allAnimals.sort(compareFunction);
     function compareFunction(a, b) {
       if (a[sortThis] < b[sortThis]) {
         return 1;
@@ -126,7 +135,7 @@ function sortAnimals(dataset) {
   displayList(filteredAnimals);
 }
 
-function preapareObject(jsonObject) {
+function prepareObject(jsonObject) {
   const animal = Object.create(Animal);
 
   const texts = jsonObject.fullname.split(" ");
@@ -147,6 +156,7 @@ function displayList(animals) {
 }
 
 function displayAnimal(animal) {
+  console.log(animal);
   // create clone
   const clone = document
     .querySelector("template#animal")
@@ -157,7 +167,19 @@ function displayAnimal(animal) {
   clone.querySelector("[data-field=desc]").textContent = animal.desc;
   clone.querySelector("[data-field=type]").textContent = animal.type;
   clone.querySelector("[data-field=age]").textContent = animal.age;
-
+  clone.querySelector("[data-field=star]").textContent = animal.star;
+  clone
+    .querySelector("[data-field='star']")
+    .addEventListener("click", function() {
+      toggleStar(animal);
+    });
   // append clone to list
   document.querySelector("#list tbody").appendChild(clone);
+
+  // add eventlistener
+}
+
+function toggleStar(thisStar) {
+  thisStar.star = thisStar.star === "☆" ? "⭐" : "☆";
+  displayList(allAnimals);
 }
