@@ -39,25 +39,25 @@ function start() {
   document
     .querySelector("[data-action='sort'][data-sort='name']")
     .addEventListener("click", selected => {
-      sortName(selected.originalTarget.dataset.sortDirection);
+      sortAnimals(selected.originalTarget.dataset);
     });
 
   document
     .querySelector("[data-action='sort'][data-sort='type']")
     .addEventListener("click", selected => {
-      sortType(selected.originalTarget.dataset.sortDirection);
+      sortAnimals(selected.originalTarget.dataset);
     });
 
   document
     .querySelector("[data-action='sort'][data-sort='desc']")
     .addEventListener("click", selected => {
-      sortDesc(selected.originalTarget.dataset.sortDirection);
+      sortAnimals(selected.originalTarget.dataset);
     });
 
   document
     .querySelector("[data-action='sort'][data-sort='age']")
     .addEventListener("click", selected => {
-      sortAge(selected.originalTarget.dataset.sortDirection);
+      sortAnimals(selected.originalTarget.dataset);
     });
 
   loadJSON();
@@ -81,170 +81,49 @@ function prepareObjects(jsonData) {
 
 function filterAnimals(filterThis) {
   if (filterThis === "cat") {
-    filteredAnimals = allAnimals.filter(isCat);
+    filteredAnimals = allAnimals.filter(isFilteredAnimal);
   }
   if (filterThis === "dog") {
-    filteredAnimals = allAnimals.filter(isDog);
+    filteredAnimals = allAnimals.filter(isFilteredAnimal);
   }
   if (filterThis === "*") {
     filteredAnimals = allAnimals;
   }
-  displayList(filteredAnimals);
-}
-
-function isDog(animal) {
-  if (animal.type === "dog") {
-    return true;
-  } else {
-    return false;
-  }
-}
-function isCat(animal) {
-  if (animal.type === "cat") {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function sortName(direction) {
-  if (direction === "asc") {
-    filteredAnimals.sort(compareNamesAZ);
-    document.querySelector(
-      "[data-action='sort'][data-sort='name']"
-    ).dataset.sortDirection = "des";
-    document.querySelector("[data-action='sort'][data-sort='name']");
-    console.log("ascend");
-  }
-  if (direction === "des") {
-    filteredAnimals.sort(compareNamesZA);
-    document.querySelector(
-      "[data-action='sort'][data-sort='name']"
-    ).dataset.sortDirection = "asc";
-    console.log("descend");
+  function isFilteredAnimal(animal) {
+    if (animal.type === filterThis) {
+      return true;
+    } else {
+      return false;
+    }
   }
   displayList(filteredAnimals);
 }
 
-function compareNamesAZ(a, b) {
-  if (a.name < b.name) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
+function sortAnimals(dataset) {
+  const sortThis = dataset.sort;
 
-function compareNamesZA(a, b) {
-  if (b.name < a.name) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortType(direction) {
-  if (direction === "asc") {
-    filteredAnimals.sort(compareTypeAZ);
-    document.querySelector(
-      "[data-action='sort'][data-sort='type']"
-    ).dataset.sortDirection = "des";
-    document.querySelector("[data-action='sort'][data-sort='type']");
-    console.log("ascend");
-  }
-  if (direction === "des") {
-    filteredAnimals.sort(compareTypeZA);
-    document.querySelector(
-      "[data-action='sort'][data-sort='type']"
-    ).dataset.sortDirection = "asc";
-    console.log("descend");
+  if (dataset.sortDirection === "asc") {
+    filteredAnimals.sort(compareFunction);
+    function compareFunction(a, b) {
+      if (a[sortThis] < b[sortThis]) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
+    dataset.sortDirection = "des";
+  } else if (dataset.sortDirection === "des") {
+    filteredAnimals.sort(compareFunction);
+    function compareFunction(a, b) {
+      if (a[sortThis] < b[sortThis]) {
+        return 1;
+      } else {
+        return -1;
+      }
+    }
+    dataset.sortDirection = "asc";
   }
   displayList(filteredAnimals);
-}
-
-function compareTypeAZ(a, b) {
-  if (a.type < b.type) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function compareTypeZA(a, b) {
-  if (b.type < a.type) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortDesc(direction) {
-  if (direction === "asc") {
-    filteredAnimals.sort(compareDescAZ);
-    document.querySelector(
-      "[data-action='sort'][data-sort='desc']"
-    ).dataset.sortDirection = "des";
-    document.querySelector("[data-action='sort'][data-sort='desc']");
-    console.log("ascend");
-  }
-  if (direction === "des") {
-    filteredAnimals.sort(compareDescZA);
-    document.querySelector(
-      "[data-action='sort'][data-sort='desc']"
-    ).dataset.sortDirection = "asc";
-    console.log("descend");
-  }
-  displayList(filteredAnimals);
-}
-
-function compareDescAZ(a, b) {
-  if (a.desc < b.desc) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function compareDescZA(a, b) {
-  if (b.desc < a.desc) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortAge(direction) {
-  if (direction === "asc") {
-    filteredAnimals.sort(compareAge1to9);
-    document.querySelector(
-      "[data-action='sort'][data-sort='age']"
-    ).dataset.sortDirection = "des";
-    document.querySelector("[data-action='sort'][data-sort='age']");
-    console.log("ascend");
-  }
-  if (direction === "des") {
-    filteredAnimals.sort(compareAge9to1);
-    document.querySelector(
-      "[data-action='sort'][data-sort='age']"
-    ).dataset.sortDirection = "asc";
-    console.log("descend");
-  }
-  displayList(filteredAnimals);
-}
-
-function compareAge1to9(a, b) {
-  if (a.age < b.age) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function compareAge9to1(a, b) {
-  if (b.age < a.age) {
-    return -1;
-  } else {
-    return 1;
-  }
 }
 
 function preapareObject(jsonObject) {
