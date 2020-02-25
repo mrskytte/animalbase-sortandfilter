@@ -203,7 +203,7 @@ function toggleWinner(thisAnimal) {
   if (thisAnimal.winner === "true") {
     thisAnimal.winner = "false";
     displayList(allAnimals);
-  } else if (sameTypeWinners.length > 0) {
+  } else if (totalWinners.some(winner => winner.type === thisAnimal.type)) {
     console.log("two of same kind");
     callAlertSameType(sameTypeWinners[0], thisAnimal);
   } else if (totalWinners.length === 2) {
