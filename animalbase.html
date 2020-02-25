@@ -25,6 +25,9 @@
     <table id="list">
       <thead>
         <tr id="sorting">
+          <th data-action="sort" data-sort-direction="asc" data-sort="winner">
+            🏆
+          </th>
           <th data-action="sort" data-sort-direction="asc" data-sort="star">
             ⭐
           </th>
@@ -49,6 +52,7 @@
 
     <template id="animal">
       <tr>
+        <td data-field="winner" data-winner="false">🏆</td>
         <td data-field="star">☆</td>
         <td data-field="name">NAME</td>
         <td data-field="type">TYPE</td>
@@ -56,6 +60,34 @@
         <td data-field="age">AGE</td>
       </tr>
     </template>
+
+    <div id="onlytwowinners" class="dialog">
+      <div class="dialogcontent">
+        <button class="closebutton">close</button>
+        <h1>You can only have two winners!</h1>
+        <h2>Remove one, before you appoint more</h2>
+        <p>
+          <button data-action="remove1">remove</button>
+          <span class="animal1">NAME, the TYPE</span>
+        </p>
+        <p>
+          <button data-action="remove2">remove</button>
+          <span class="animal2">NAME, the TYPE</span>
+        </p>
+      </div>
+    </div>
+
+    <div id="onlyonekind" class="dialog">
+      <div class="dialogcontent">
+        <button class="closebutton">close</button>
+        <h1>You can only have one winner of each type</h1>
+        <h2>Remove the other if you want to appoint a new one</h2>
+        <p>
+          <button data-action="remove1">remove</button>
+          <span class="animal1">NAME, the TYPE</span>
+        </p>
+      </div>
+    </div>
 
     <script src="animalbase.js"></script>
   </body>
